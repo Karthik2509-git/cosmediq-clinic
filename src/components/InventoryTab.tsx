@@ -451,8 +451,29 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
       </section>
 
       {/* Live Stock Grid: Responsive Tactile Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-        {filteredItems.map((item) => {
+      {filteredItems.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center mb-8 shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#6366F1] mx-auto mb-4">
+            <Pill className="w-8 h-8" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-800 mb-1">
+            No Medicines or Products in Clinic Stock
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mb-6 font-ledger">
+            All mock stock has been removed. You can now add your clinic's own medicines, OT consumables, and retail products to track them in real time.
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowAddModal(true)}
+            className="h-11 px-5 rounded-xl bg-[#1E1B4B] hover:bg-[#312E81] text-white text-xs font-bold inline-flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95"
+          >
+            <PlusCircle className="w-4 h-4 text-teal-300" />
+            <span>+ Add Your First Medicine / Product</span>
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+          {filteredItems.map((item) => {
           const isLow = item.inStock <= item.minThreshold;
           const isRetailAction = item.id === 'biotin' || item.mrp;
           const percent = Math.min(100, Math.round((item.inStock / item.maxGauge) * 100));
@@ -608,7 +629,8 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
             </article>
           );
         })}
-      </div>
+        </div>
+      )}
 
       {/* Operational Audit Trail & Recent Dispensation Strip */}
       <section className="w-full bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm mb-6">
@@ -628,32 +650,38 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {dispensationLogs.map((log) => (
-            <div
-              key={log.id}
-              className="bg-slate-50/80 hover:bg-indigo-50/60 p-3 rounded-xl border border-slate-200/80 hover:border-indigo-200 flex items-center gap-3 transition-all cursor-pointer group"
-            >
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#6366F1] group-hover:bg-[#6366F1] group-hover:text-white transition-all shadow-xs">
-                {log.type === 'medicine' ? (
-                  <Pill className="w-4 h-4" />
-                ) : log.type === 'ot' ? (
-                  <Activity className="w-4 h-4 text-amber-600 group-hover:text-white" />
-                ) : (
-                  <ShoppingBag className="w-4 h-4" />
-                )}
+        {dispensationLogs.length === 0 ? (
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-center font-ledger text-xs text-slate-500">
+            No dispensations recorded yet today. When staff clicks <strong>[-1 Dispense]</strong> on any medicine or serum, live timestamps will appear here automatically.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {dispensationLogs.map((log) => (
+              <div
+                key={log.id}
+                className="bg-slate-50/80 hover:bg-indigo-50/60 p-3 rounded-xl border border-slate-200/80 hover:border-indigo-200 flex items-center gap-3 transition-all cursor-pointer group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0 text-[#6366F1] group-hover:bg-[#6366F1] group-hover:text-white transition-all shadow-xs">
+                  {log.type === 'medicine' ? (
+                    <Pill className="w-4 h-4" />
+                  ) : log.type === 'ot' ? (
+                    <Activity className="w-4 h-4 text-amber-600 group-hover:text-white" />
+                  ) : (
+                    <ShoppingBag className="w-4 h-4" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-slate-900 truncate group-hover:text-[#6366F1] transition-colors">
+                    {log.title}
+                  </p>
+                  <p className="font-ledger text-[11px] text-slate-400 truncate">
+                    {log.subtitle}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-slate-900 truncate group-hover:text-[#6366F1] transition-colors">
-                  {log.title}
-                </p>
-                <p className="font-ledger text-[11px] text-slate-400 truncate">
-                  {log.subtitle}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Sticky Operational Control Bar for Front Desk Staff */}
@@ -667,7 +695,9 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               Dispensary Operations Active
             </span>
             <span className="font-ledger text-xs text-indigo-200 truncate">
-              {inventory.length} SKUs Monitored • Total Clinic Stock Value: ₹4,18,600
+              {inventory.length === 0
+                ? '0 SKUs Registered • Click [+ Add New Consumable] to add clinic products'
+                : `${inventory.length} SKUs Monitored • Total Units: ${inventory.reduce((sum, i) => sum + i.inStock, 0)}`}
             </span>
           </div>
         </div>

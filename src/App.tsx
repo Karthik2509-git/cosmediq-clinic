@@ -52,11 +52,11 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Core application state
-  const [patients, setPatients] = useState<Patient[]>(INITIAL_PATIENTS);
-  const [deals, setDeals] = useState<ClosureDeal[]>(INITIAL_CLOSURE_DEALS);
-  const [inventory, setInventory] = useState<InventoryItem[]>(INITIAL_INVENTORY);
-  const [dispensationLogs, setDispensationLogs] = useState<DispensationLog[]>(INITIAL_DISPENSATION_LOGS);
-  const [appointments, setAppointments] = useState<Appointment[]>(INITIAL_APPOINTMENTS);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [deals, setDeals] = useState<ClosureDeal[]>([]);
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  const [dispensationLogs, setDispensationLogs] = useState<DispensationLog[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   // Database persistence state
   const [isDbConnected, setIsDbConnected] = useState<boolean>(false);
@@ -98,12 +98,8 @@ export default function App() {
             setPatients(Array.isArray(data.patients) ? data.patients : []);
             setDeals(Array.isArray(data.deals) ? data.deals : []);
             setAppointments(Array.isArray(data.appointments) ? data.appointments : []);
-            if (Array.isArray(data.inventory) && data.inventory.length > 0) {
-              setInventory(data.inventory);
-            }
-            if (Array.isArray(data.dispensationLogs)) {
-              setDispensationLogs(data.dispensationLogs);
-            }
+            setInventory(Array.isArray(data.inventory) ? data.inventory : []);
+            setDispensationLogs(Array.isArray(data.dispensationLogs) ? data.dispensationLogs : []);
             setIsCleanMode(Boolean(data.isCleanTestWeek || (data.patients && data.patients.length === 0)));
             setIsDbConnected(true);
             setIsInitialLoadDone(true);
@@ -693,12 +689,13 @@ export default function App() {
         setPatients([]);
         setDeals([]);
         setAppointments([]);
+        setInventory([]);
         setDispensationLogs([]);
         setIsCleanMode(true);
         try {
           localStorage.removeItem('cosmediq_clinic_database');
         } catch (e) {}
-        showToast('Database cleared! Ready for Real Patients Test Week (0 mock records).', 'success');
+        showToast('Database cleared! 0 mock patients, 0 mock stock. Ready for test week.', 'success');
       }
     } catch (err) {
       showToast('Could not clear server database.', 'alert');

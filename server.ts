@@ -56,12 +56,12 @@ interface ClinicDatabase {
 
 async function getDatabase(): Promise<ClinicDatabase> {
   if (!fs.existsSync(DB_FILE)) {
-    // For test week: Clean database with 0 mock patients/deals/appointments, but with inventory items ready
+    // For test week: Clean database with 0 mock patients/deals/appointments/stock
     const cleanDb: ClinicDatabase = {
       patients: [],
       deals: [],
       appointments: [],
-      inventory: INITIAL_INVENTORY,
+      inventory: [],
       dispensationLogs: [],
       isCleanTestWeek: true,
       lastUpdated: new Date().toISOString(),
@@ -79,7 +79,7 @@ async function getDatabase(): Promise<ClinicDatabase> {
       patients: [],
       deals: [],
       appointments: [],
-      inventory: INITIAL_INVENTORY,
+      inventory: [],
       dispensationLogs: [],
       isCleanTestWeek: true,
       lastUpdated: new Date().toISOString(),
@@ -284,14 +284,14 @@ async function startServer() {
     }
   });
 
-  // Database API: Clear all data for Clean Test Week (0 mock patients)
+  // Database API: Clear all data for Clean Test Week (0 mock patients / stock)
   app.post('/api/clear-all', async (_req: Request, res: Response) => {
     try {
       const cleanDb: ClinicDatabase = {
         patients: [],
         deals: [],
         appointments: [],
-        inventory: INITIAL_INVENTORY,
+        inventory: [],
         dispensationLogs: [],
         isCleanTestWeek: true,
         lastUpdated: new Date().toISOString(),
@@ -299,7 +299,7 @@ async function startServer() {
       await fs.promises.writeFile(DB_FILE, JSON.stringify(cleanDb, null, 2), 'utf-8');
       res.json({
         success: true,
-        message: 'Clinic database initialized to Clean Test Week state (0 patients, 0 deals, 0 appointments).',
+        message: 'Clinic database initialized to Clean Test Week state (0 patients, 0 deals, 0 appointments, 0 stock).',
         data: cleanDb,
       });
     } catch (err: any) {
