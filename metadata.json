@@ -1,0 +1,6 @@
+{
+  "name": "COSMEDIQ — Skin & Hair Clinic Staff Desk",
+  "description": "Ultra-clean clinical operating desk environment for COSMEDIQ Skin and Hair Transplant Specialist front-desk staff to manage patient registers, treatment closures, balance dues, and dispensary stock.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

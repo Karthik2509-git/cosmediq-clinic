@@ -1,0 +1,225 @@
+---
+name: Atelier Clinical OS
+colors:
+  surface: '#f9f9fb'
+  surface-dim: '#d9dadc'
+  surface-bright: '#f9f9fb'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f3f3f5'
+  surface-container: '#edeef0'
+  surface-container-high: '#e8e8ea'
+  surface-container-highest: '#e2e2e4'
+  on-surface: '#1a1c1d'
+  on-surface-variant: '#47464f'
+  inverse-surface: '#2f3132'
+  inverse-on-surface: '#f0f0f2'
+  outline: '#787680'
+  outline-variant: '#c8c5d0'
+  surface-tint: '#5b598c'
+  primary: '#070235'
+  on-primary: '#ffffff'
+  primary-container: '#1e1b4b'
+  on-primary-container: '#8683ba'
+  inverse-primary: '#c4c1fb'
+  secondary: '#4648d4'
+  on-secondary: '#ffffff'
+  secondary-container: '#6063ee'
+  on-secondary-container: '#fffbff'
+  tertiary: '#000f07'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#002819'
+  on-tertiary-container: '#009d6c'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#e3dfff'
+  primary-fixed-dim: '#c4c1fb'
+  on-primary-fixed: '#181445'
+  on-primary-fixed-variant: '#444173'
+  secondary-fixed: '#e1e0ff'
+  secondary-fixed-dim: '#c0c1ff'
+  on-secondary-fixed: '#07006c'
+  on-secondary-fixed-variant: '#2f2ebe'
+  tertiary-fixed: '#6ffbbe'
+  tertiary-fixed-dim: '#4edea3'
+  on-tertiary-fixed: '#002113'
+  on-tertiary-fixed-variant: '#005236'
+  background: '#f9f9fb'
+  on-background: '#1a1c1d'
+  surface-variant: '#e2e2e4'
+typography:
+  display-lg:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 40px
+    fontWeight: '700'
+    lineHeight: 48px
+    letterSpacing: -0.025em
+  display-lg-mobile:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 30px
+    fontWeight: '700'
+    lineHeight: 36px
+    letterSpacing: -0.02em
+  headline-lg:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 28px
+    fontWeight: '600'
+    lineHeight: 36px
+    letterSpacing: -0.02em
+  headline-lg-mobile:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 22px
+    fontWeight: '600'
+    lineHeight: 28px
+    letterSpacing: -0.015em
+  headline-md:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 26px
+    letterSpacing: -0.015em
+  title-md:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 16px
+    fontWeight: '600'
+    lineHeight: 22px
+    letterSpacing: -0.01em
+  body-lg:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 15px
+    fontWeight: '400'
+    lineHeight: 24px
+    letterSpacing: -0.005em
+  body-md:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 20px
+    letterSpacing: 0em
+  body-sm:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+    letterSpacing: 0.005em
+  label-md:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 12px
+    fontWeight: '600'
+    lineHeight: 16px
+    letterSpacing: 0.02em
+  label-sm:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 10px
+    fontWeight: '700'
+    lineHeight: 12px
+    letterSpacing: 0.05em
+  tabular-number:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 13px
+    fontWeight: '500'
+    lineHeight: 18px
+    letterSpacing: -0.01em
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  gutter: 1.25rem
+  gutter-lg: 1.75rem
+  margin: 1.5rem
+  margin-lg: 2.5rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2.25rem
+---
+
+## Brand & Style
+
+This design system establishes a high-performance clinical environment calibrated for elite aesthetic medical practices, cosmetic dermatologists, and bespoke surgical suites. The brand ethos balances clinical certitude with the tactile indulgence of a high-end atelier. 
+
+The aesthetic diverges sharply from cold utilitarian hospital software and generic corporate healthcare blues. Instead, it leverages an architectural editorial minimalism: calm alabaster canvases, deep midnight slate typography, and surgical iris-violet indicators that highlight complex treatment charting, skin metric diagnostics, and high-ticket procedure tracking. 
+
+Key attributes:
+- **Quiet Authority:** Authoritative typography paired with generous whitespace communicates absolute safety, surgical precision, and luxury service.
+- **Material Restraint:** Translucent surfaces, sub-millimeter borders, and optical shadows establish tactile depth without visual noise.
+- **Editorial Clinicalism:** Data density remains balanced; high-resolution imaging, patient histories, and procedural schedules read with the elegance of an art monograph.
+
+## Colors
+
+The palette rejects standard medical cyan and sterile cool-grays, opting for deep midnight tones and warm mineral underpinnings.
+
+- **Primary (`#1E1B4B` / `#312E81`):** Deep Midnight Slate. Used for primary typography, dominant structural headers, key navigation anchors, and authoritative clinical summaries. It grounds the UI with weight and discretion.
+- **Secondary (`#6366F1` / Iris Violet):** The operational accent. Indicates active selection states, key interaction surfaces, injection mapping tools, and clinical focus indicators.
+- **Tertiary (`#10B981` / `#059669` - Sage / Eucalyptus):** Reserved for clinical verification, completed treatment cycles, and positive account reconciliations. It provides an organic, calming validation rather than an alarming neon success state.
+- **Champagne Amber (`#D97706` / `#F59E0B`):** Employed for pending balances, scheduled procedure holds, sensitive allergy warnings, and consent verification queues.
+- **Canvas & Surface Neutral (`#FBFBFD` to `#F3F4F8`):** Layered porcelain and warm alabaster. These shades create gentle separation without jarring contrasts, reducing retinal fatigue during prolonged charting sessions.
+- **Borders & Separators:** Optical boundaries defined by low-opacity midnight slate (`rgba(30, 27, 75, 0.06)`) and frosted highlights (`rgba(255, 255, 255, 0.8)`).
+
+## Typography
+
+Typographic execution relies entirely on **Plus Jakarta Sans**, utilizing its geometric clarity, tall x-height, and sculpted apertures to maintain crisp legibility in both large diagnostic displays and tight tabular record views.
+
+- **Tabular Numerics:** All medical quantities, volumetric measurements (e.g., cc, units), pricing totals, and appointment timestamps must enforce `font-feature-settings: "tnum" 1, "cv01" 1` to ensure absolute vertical scan alignment across patient ledgers.
+- **Micro-Badges & Metadata:** Set in `label-sm`, all-caps, with `letterSpacing: 0.05em` and bold weights. This ensures immediate identification of clinical flags without overpowering body copy.
+- **Rhythm & Hierarchy:** Clinical notes use `body-lg` at 1.6 line-height for uninterrupted readability, while data-heavy sidebars collapse to `body-md` and `body-sm`.
+
+## Layout & Spacing
+
+The workstation uses an asymmetric, high-density split canvas engineered around practitioner workflows:
+- **Workstation Structure:** A 16-column flexible layout engine for high-resolution diagnostic panels (minimum breakpoint `1440px`), collapsing to a responsive 12-column layout for desktop monitors and an 8-column layout for clinical tablet devices (`768px` to `1024px`).
+- **Sidebar & Panels:** Clinical utilities (such as anatomical facial charts and syringe dosing rails) sit in dedicated modular docks with fixed widths (`380px` desktop) paired with fluid multi-column patient history streams.
+- **Spacing Scale:** Built on a disciplined 4px base rhythm. Small intervals (`space-xs`, `space-sm`) structure dense metric matrices and dosage inputs; broader intervals (`space-lg`, `space-xl`) isolate distinct treatment episodes and diagnostic photographic galleries.
+- **Margins & Safe Zones:** Canvas boundaries maintain `margin-lg` (40px) padding to prevent visual crowding around edge-mounted medical device telemetry and navigation hubs.
+
+## Elevation & Depth
+
+Visual depth is achieved through translucent structural planes, crisp low-contrast borders, and deeply feathered, slate-tinted ambient shadows rather than stark mechanical drop-shadows.
+
+- **Level 0 (Base Canvas):** Solid warm alabaster (`#FBFBFD`). The primary physical layer on which all diagnostic panels rest.
+- **Level 1 (Card & Module Surfaces):** Solid pure porcelain (`#FFFFFF`) framed by an optical sub-border of `1px solid rgba(30, 27, 75, 0.05)`. Casts an ambient shadow: `0 2px 12px -2px rgba(30, 27, 75, 0.03), 0 1px 3px rgba(30, 27, 75, 0.02)`.
+- **Level 2 (Interactive Flyouts & Diagnostic Modals):** Frosted porcelain backdrop (`rgba(255, 255, 255, 0.88)` with `backdrop-filter: blur(16px)`). Supported by dual borders: an outer structural line (`rgba(30, 27, 75, 0.08)`) and an inner soft rim highlight (`rgba(255, 255, 255, 0.6)`). Shadow: `0 12px 32px -4px rgba(30, 27, 75, 0.08), 0 4px 12px -2px rgba(30, 27, 75, 0.04)`.
+- **Level 3 (Tactile Hover & Drag States):** Active clinical tags, treatment pins, and dragged patient appointments lift subtly with `transform: translateY(-1px)` and a targeted iris shadow: `0 8px 24px -2px rgba(99, 102, 241, 0.12)`.
+
+## Shapes
+
+The design system maintains a refined balance between clinical precision and architectural softness.
+
+- **Primary Geometry:** Default elements use a structured 8px radius (`0.5rem`). This provides modern warmth without compromising the rectilinear grid discipline necessary for complex medical matrices.
+- **Cards & Panes (`rounded-lg`):** Main clinical containers, patient summary cards, and photographic viewports utilize a 16px radius (`1rem`), framing medical assets cleanly against the porcelain backdrop.
+- **Status Pills & Micro-Controls:** Micro-badges, dosage chips, filter selectors, and interactive injection markers utilize full pill styling to stand out as distinct, touch-safe targets.
+
+## Components
+
+### Buttons
+- **Primary Clinical Action:** Background `#1E1B4B`, text `#FFFFFF`, radius `8px`, height `40px` (or `34px` compact). High-contrast label in `label-md`. Hover state subtly transitions to `#312E81`.
+- **Secondary (Iris Interactive):** Background `rgba(99, 102, 241, 0.08)`, text `#6366F1`, border `1px solid rgba(99, 102, 241, 0.18)`. Hover transitions to solid Iris `#6366F1` with white text.
+- **Tertiary / Ghost:** Borderless, deep slate text (`rgba(30, 27, 75, 0.7)`), background transparent, applying subtle porcelain hover wash (`rgba(30, 27, 75, 0.04)`).
+
+### Cards & Clinical Containers
+- Engineered with pure white foundations (`#FFFFFF`), rounded-lg corners, and dual low-contrast rims. 
+- Headers feature sharp baseline dividing lines (`1px solid rgba(30, 27, 75, 0.04)`), separating patient demographic metadata from procedure workflows.
+
+### Micro-Badges & Status Indicators
+- **Verified / Paid:** Eucalyptus background (`rgba(16, 185, 129, 0.08)`), text `#059669`, border `1px solid rgba(16, 185, 129, 0.2)`. Uses `label-sm` with a `6px` solid status bead.
+- **Pending Dues / Action Required:** Champagne Amber background (`rgba(217, 119, 6, 0.08)`), text `#D97706`, border `1px solid rgba(217, 119, 6, 0.2)`.
+- **In-Treatment / Active:** Iris Violet background (`rgba(99, 102, 241, 0.08)`), text `#6366F1`, border `1px solid rgba(99, 102, 241, 0.2)`.
+
+### Input Fields & Metric Selectors
+- Background `#FFFFFF`, border `1px solid rgba(30, 27, 75, 0.12)`, radius `8px`. Padding `10px 14px`. 
+- Focus state eliminates standard blue rings; instead, it transitions to a precise `1px solid #6366F1` with an ambient glow (`box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12)`).
+- Tabular numeric alignment applied to dosage and billing units.
+
+### Checkboxes & Segmented Controls
+- Segmented switches sit inside a recessed porcelain channel (`#F3F4F8`) with a sliding white pill indicator elevated by `Level 1` shadow.
+- Checkboxes use an 8px softly squared form factor, turning `#1E1B4B` when selected, with a centered white geometric check.
+
+### Additional Domain Components
+- **Facial Mapping Nodes:** Scalable vector pins with Iris cores (`#6366F1`) and semi-transparent halos for designating Botulinum toxin units or dermal filler depth.
+- **Comparative Photographic Slider:** Ultra-thin frosted divider bar (`backdrop-filter: blur(8px)`) with crisp split-pane before/after alignment labels.
