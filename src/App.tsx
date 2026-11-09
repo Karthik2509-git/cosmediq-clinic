@@ -276,6 +276,19 @@ export default function App() {
     showToast(`Purchase Order #4093 drafted for ${lowStockCount} low-stock items. Sent to clinic procurement.`);
   };
 
+  const handleDeleteInventoryItem = (itemId: string) => {
+    const targetItem = inventory.find((i) => i.id === itemId);
+    if (!targetItem) return;
+
+    const confirmed = window.confirm(
+      `Remove "${targetItem.name}" from clinic stock? This will delete the item from inventory.`
+    );
+    if (!confirmed) return;
+
+    setInventory((prev) => prev.filter((i) => i.id !== itemId));
+    showToast(`Removed "${targetItem.name}" from clinic inventory.`, 'info');
+  };
+
   const handleExportVendorOrder = () => {
     const csvContent =
       'data:text/csv;charset=utf-8,' +
@@ -864,6 +877,7 @@ export default function App() {
             onAdjustStock={handleAdjustStock}
             onQuickReorder={handleQuickReorder}
             onExportVendorOrder={handleExportVendorOrder}
+            onDeleteItem={handleDeleteInventoryItem}
             onAddNewItem={(item) => {
               const fullItem: InventoryItem = {
                 id: `item-${Date.now()}`,

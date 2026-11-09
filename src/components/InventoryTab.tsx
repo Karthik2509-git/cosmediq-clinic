@@ -24,7 +24,8 @@ import {
   Lock,
   Store,
   Activity,
-  Layers
+  Layers,
+  Trash2
 } from 'lucide-react';
 import { InventoryItem, DispensationLog, formatIndianCurrency } from '../utils/clinicLogic';
 
@@ -35,6 +36,7 @@ interface InventoryTabProps {
   onQuickReorder: () => void;
   onExportVendorOrder: () => void;
   onAddNewItem: (item: Partial<InventoryItem>) => void;
+  onDeleteItem?: (itemId: string) => void;
   searchQuery: string;
 }
 
@@ -45,6 +47,7 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
   onQuickReorder,
   onExportVendorOrder,
   onAddNewItem,
+  onDeleteItem,
   searchQuery,
 }) => {
   const [activeSegment, setActiveSegment] = useState<'pharmacy' | 'products'>('pharmacy');
@@ -496,26 +499,39 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               className="group bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#6366F1]/40"
             >
               <div>
-                {/* Card Header Tags */}
+                {/* Card Header Tags & Delete Action */}
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-900 border border-indigo-100 text-xs font-semibold flex items-center gap-1">
-                    {item.tag}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-900 border border-indigo-100 text-xs font-semibold flex items-center gap-1">
+                      {item.tag}
+                    </span>
 
-                  {isLow ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200 text-xs font-bold flex items-center gap-1 animate-pulse">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                      LOW STOCK
-                    </span>
-                  ) : item.vendorInfo ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold">
-                      {item.vendorInfo}
-                    </span>
-                  ) : (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                      Ample Stock
-                    </span>
+                    {isLow ? (
+                      <span className="px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200 text-xs font-bold flex items-center gap-1 animate-pulse">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                        LOW STOCK
+                      </span>
+                    ) : item.vendorInfo ? (
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold">
+                        {item.vendorInfo}
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Ample Stock
+                      </span>
+                    )}
+                  </div>
+
+                  {onDeleteItem && (
+                    <button
+                      type="button"
+                      onClick={() => onDeleteItem(item.id)}
+                      className="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-all cursor-pointer active:scale-95 shrink-0"
+                      title={`Remove ${item.name} from clinic stock`}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   )}
                 </div>
 
@@ -903,31 +919,51 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setAdjustTarget(null)}
-                  className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold active:scale-95 transition-all cursor-pointer"
-                >
-                  Cancel
-                </button>
+              <div className="flex items-center justify-between gap-2.5 pt-3 border-t border-slate-100">
+                {onDeleteItem ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const id = adjustTarget.item.id;
+                      setAdjustTarget(null);
+                      onDeleteItem(id);
+                    }}
+                    className="h-11 px-3 rounded-xl text-rose-600 hover:bg-rose-50 hover:text-rose-700 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                    title={`Delete ${adjustTarget.item.name} from clinic stock`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span>Delete Item</span>
+                  </button>
+                ) : (
+                  <div></div>
+                )}
 
-                <button
-                  type="submit"
-                  disabled={
-                    !adjustQty ||
-                    Number(adjustQty) <= 0 ||
-                    (adjustTarget.mode === 'use' && Number(adjustQty) > adjustTarget.item.inStock)
-                  }
-                  className={`h-11 px-6 rounded-xl text-white text-xs font-bold active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${adjustTarget.mode === 'use'
-                      ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/30'
-                      : 'bg-[#6366F1] hover:bg-indigo-600 shadow-indigo-600/30'
-                    }`}
-                >
-                  {adjustTarget.mode === 'use'
-                    ? `Confirm & Deduct (${Number(adjustQty) || 0} ${adjustTarget.item.unit})`
-                    : `Confirm Restock (+${Number(adjustQty) || 0} ${adjustTarget.item.unit})`}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAdjustTarget(null)}
+                    className="h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold active:scale-95 transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={
+                      !adjustQty ||
+                      Number(adjustQty) <= 0 ||
+                      (adjustTarget.mode === 'use' && Number(adjustQty) > adjustTarget.item.inStock)
+                    }
+                    className={`h-11 px-6 rounded-xl text-white text-xs font-bold active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${adjustTarget.mode === 'use'
+                        ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/30'
+                        : 'bg-[#6366F1] hover:bg-indigo-600 shadow-indigo-600/30'
+                      }`}
+                  >
+                    {adjustTarget.mode === 'use'
+                      ? `Confirm & Deduct (${Number(adjustQty) || 0} ${adjustTarget.item.unit})`
+                      : `Confirm Restock (+${Number(adjustQty) || 0} ${adjustTarget.item.unit})`}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
