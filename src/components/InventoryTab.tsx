@@ -4,25 +4,25 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  AlertTriangle, 
-  ShoppingCart, 
-  BookOpen, 
-  Search, 
-  X, 
-  QrCode, 
-  Pill, 
-  Sparkles, 
-  Plus, 
-  Minus, 
-  ShoppingBag, 
-  History, 
-  Download, 
-  PlusCircle, 
-  CheckCircle2, 
-  Archive, 
-  Lock, 
-  Store, 
+import {
+  AlertTriangle,
+  ShoppingCart,
+  BookOpen,
+  Search,
+  X,
+  QrCode,
+  Pill,
+  Sparkles,
+  Plus,
+  Minus,
+  ShoppingBag,
+  History,
+  Download,
+  PlusCircle,
+  CheckCircle2,
+  Archive,
+  Lock,
+  Store,
   Activity,
   Layers
 } from 'lucide-react';
@@ -89,12 +89,12 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
       item.id === 'lignocaine'
         ? 'OT Narcotics Use'
         : item.id === 'prp'
-        ? 'PRP OPD Procedure'
-        : item.id === 'punches'
-        ? 'OT Hair Transplant'
-        : item.tabCategory === 'pharmacy'
-        ? 'Clinic OPD Procedure'
-        : 'Patient Retail Counter'
+          ? 'PRP OPD Procedure'
+          : item.id === 'punches'
+            ? 'OT Hair Transplant'
+            : item.tabCategory === 'pharmacy'
+              ? 'Clinic OPD Procedure'
+              : 'Patient Retail Counter'
     );
   };
 
@@ -239,7 +239,7 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
 
   return (
     <div className="flex flex-col w-full pb-16 max-w-7xl mx-auto">
-      
+
       {/* Top Operational Banner: Low Stock Urgent Notice */}
       <section className="w-full mb-6">
         <div className="urgent-banner-glow w-full bg-gradient-to-r from-red-50 via-rose-50/80 to-amber-50/60 border border-red-300 text-rose-950 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm transition-all duration-300">
@@ -275,9 +275,9 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
 
       {/* Control Deck & Segmented Selectors */}
       <section className="w-full bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/90 shadow-sm mb-6 flex flex-col gap-4">
-        
+
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          
+
           {/* Title & Physical Ledger Citation Badge */}
           <div className="flex items-center gap-3 flex-wrap">
             <div>
@@ -320,11 +320,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               type="button"
               onClick={() => setScannerOpen(!scannerOpen)}
               title="Scan Barcode via Counter Cam"
-              className={`h-11 w-11 shrink-0 rounded-xl flex items-center justify-center transition-all border active:scale-95 cursor-pointer ${
-                scannerOpen
+              className={`h-11 w-11 shrink-0 rounded-xl flex items-center justify-center transition-all border active:scale-95 cursor-pointer ${scannerOpen
                   ? 'bg-indigo-100 text-[#6366F1] border-indigo-300'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
-              }`}
+                }`}
             >
               <QrCode className="w-5 h-5" />
             </button>
@@ -353,7 +352,7 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
 
         {/* Big Two-Way Segmented Control Toggle & Micro Filter */}
         <div className="flex flex-col gap-3 pt-2 border-t border-slate-100">
-          
+
           {/* Row 1: Segmented Department Buttons */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200 w-full sm:w-auto shadow-inner">
@@ -363,11 +362,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                   setActiveSegment('pharmacy');
                   setActiveFilter('all');
                 }}
-                className={`flex-1 sm:flex-none h-10 px-4 sm:px-6 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
-                  activeSegment === 'pharmacy' && activeFilter === 'all'
+                className={`flex-1 sm:flex-none h-10 px-4 sm:px-6 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${activeSegment === 'pharmacy' && activeFilter === 'all'
                     ? 'bg-white text-[#1E1B4B] shadow-sm font-bold'
                     : 'text-slate-600 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <Pill className="w-4 h-4 text-[#6366F1]" />
                 <span>Clinic Pharmacy (Medicines &amp; Post-Op)</span>
@@ -382,11 +380,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                   setActiveSegment('products');
                   setActiveFilter('all');
                 }}
-                className={`flex-1 sm:flex-none h-10 px-4 sm:px-6 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${
-                  activeSegment === 'products' && activeFilter === 'all'
+                className={`flex-1 sm:flex-none h-10 px-4 sm:px-6 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${activeSegment === 'products' && activeFilter === 'all'
                     ? 'bg-white text-[#1E1B4B] shadow-sm font-bold'
                     : 'text-slate-600 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <Sparkles className="w-4 h-4 text-slate-400" />
                 <span>Clinic Products (Serums, Shampoos &amp; Care)</span>
@@ -405,11 +402,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveFilter('all')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  activeFilter === 'all'
+                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${activeFilter === 'all'
                     ? 'bg-[#1E1B4B] text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                  }`}
               >
                 All Items
               </button>
@@ -417,11 +413,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveFilter('low')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all cursor-pointer ${
-                  activeFilter === 'low'
+                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all cursor-pointer ${activeFilter === 'low'
                     ? 'bg-rose-600 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-700'
-                }`}
+                  }`}
               >
                 <span className="w-2 h-2 rounded-full bg-rose-500 inline-block animate-pulse"></span>
                 Low Stock Only ({lowStockItems.length})
@@ -430,11 +425,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveFilter('ot')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  activeFilter === 'ot'
+                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${activeFilter === 'ot'
                     ? 'bg-[#1E1B4B] text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                  }`}
               >
                 OT Consumables
               </button>
@@ -442,11 +436,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveFilter('retail')}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  activeFilter === 'retail'
+                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${activeFilter === 'retail'
                     ? 'bg-[#1E1B4B] text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                  }`}
               >
                 Retail Dispense
               </button>
@@ -536,9 +529,8 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                         CURRENT IN-STOCK
                       </span>
                       <div className="flex items-baseline mt-0.5">
-                        <span className={`text-3xl font-bold font-ledger leading-none ${
-                          isLow ? 'text-red-600' : 'text-[#1E1B4B]'
-                        }`}>
+                        <span className={`text-3xl font-bold font-ledger leading-none ${isLow ? 'text-red-600' : 'text-[#1E1B4B]'
+                          }`}>
                           {item.inStock}
                         </span>
                         <span className="text-xs font-medium text-slate-500 ml-1.5">
@@ -547,11 +539,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                       </div>
                     </div>
 
-                    <span className={`text-right font-ledger text-xs font-semibold px-2 py-0.5 rounded ${
-                      isLow
+                    <span className={`text-right font-ledger text-xs font-semibold px-2 py-0.5 rounded ${isLow
                         ? 'text-red-700 bg-red-100'
                         : 'text-emerald-700 bg-emerald-50'
-                    }`}>
+                      }`}>
                       {isLow ? `Min Threshold: ${item.minThreshold}` : 'Stock Optimal'}
                     </span>
                   </div>
@@ -559,11 +550,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                   {/* Level Gauge Bar */}
                   <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        isLow
+                      className={`h-full rounded-full transition-all duration-500 ${isLow
                           ? 'bg-gradient-to-r from-red-500 to-rose-400'
                           : 'bg-gradient-to-r from-[#6366F1] to-teal-400'
-                      }`}
+                        }`}
                       style={{ width: `${Math.max(8, percent)}%` }}
                     ></div>
                   </div>
@@ -574,7 +564,7 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
               {/* Manual Usage & Restocking Actions */}
               <div className="flex flex-col gap-1.5 pt-1">
                 <div className="grid grid-cols-2 gap-2.5">
-                  
+
                   {/* Action 1: Record Used / Dispense / Sell */}
                   {isRetailAction ? (
                     <button
@@ -705,22 +695,21 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
 
       {/* Manual Stock Adjustment Modal (Usage & Restock) */}
       {adjustTarget && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-[#1E1B4B]/70 backdrop-blur-sm flex items-center justify-center p-4 transition-all"
           onClick={() => setAdjustTarget(null)}
         >
-          <div 
+          <div
             className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 flex flex-col gap-5 animate-fade-in-up"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
-                  adjustTarget.mode === 'use'
+                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${adjustTarget.mode === 'use'
                     ? 'bg-amber-100 text-amber-700 border border-amber-200'
                     : 'bg-indigo-100 text-[#6366F1] border border-indigo-200'
-                }`}>
+                  }`}>
                   {adjustTarget.mode === 'use' ? (
                     <Minus className="w-6 h-6 stroke-[2.5]" />
                   ) : (
@@ -835,11 +824,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                       key={num}
                       type="button"
                       onClick={() => setAdjustQty(num)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-ledger font-semibold transition-all cursor-pointer ${
-                        Number(adjustQty) === num
+                      className={`px-2.5 py-1 rounded-lg text-xs font-ledger font-semibold transition-all cursor-pointer ${Number(adjustQty) === num
                           ? 'bg-[#1E1B4B] text-white shadow-xs'
                           : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                      }`}
+                        }`}
                     >
                       {adjustTarget.mode === 'use' ? `${num}` : `+${num}`}
                     </button>
@@ -873,11 +861,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                       key={note}
                       type="button"
                       onClick={() => setAdjustReason(note)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                        adjustReason === note
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${adjustReason === note
                           ? 'bg-[#1E1B4B] text-white'
                           : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                      }`}
+                        }`}
                     >
                       {note}
                     </button>
@@ -902,11 +889,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                     Number(adjustQty) <= 0 ||
                     (adjustTarget.mode === 'use' && Number(adjustQty) > adjustTarget.item.inStock)
                   }
-                  className={`h-11 px-6 rounded-xl text-white text-xs font-bold active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                    adjustTarget.mode === 'use'
+                  className={`h-11 px-6 rounded-xl text-white text-xs font-bold active:scale-95 transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${adjustTarget.mode === 'use'
                       ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/30'
                       : 'bg-[#6366F1] hover:bg-indigo-600 shadow-indigo-600/30'
-                  }`}
+                    }`}
                 >
                   {adjustTarget.mode === 'use'
                     ? `Confirm & Deduct (${Number(adjustQty) || 0} ${adjustTarget.item.unit})`

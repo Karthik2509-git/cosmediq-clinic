@@ -511,3 +511,4 @@ export const ConsultationOutcomeModal: React.FC<ConsultationOutcomeModalProps> =
     </div>
   );
 };
+

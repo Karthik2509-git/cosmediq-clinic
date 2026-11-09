@@ -1,3 +1,8 @@
+
+
+
+
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -50,17 +55,17 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
     patient.treatments && patient.treatments.length > 0
       ? patient.treatments.map((t) => ({ ...t }))
       : [
-          {
-            id: `TRT-${Date.now()}-1`,
-            treatmentName: patient.treatmentConcern || 'PRP Hair Density Restoration (4 Sessions)',
-            category: patient.concernCategory === 'acne' || patient.concernCategory === 'laser' ? 'skin' : 'hair',
-            closureAmount: patient.totalDealAmount || 22000,
-            paidAmount: patient.paidAmount || 0,
-            remainingAmount: Math.max(0, (patient.totalDealAmount || 22000) - (patient.paidAmount || 0)),
-            totalSittings: 4,
-            completedSittings: 0,
-          },
-        ];
+        {
+          id: `TRT-${Date.now()}-1`,
+          treatmentName: patient.treatmentConcern || 'PRP Hair Density Restoration (4 Sessions)',
+          category: patient.concernCategory === 'acne' || patient.concernCategory === 'laser' ? 'skin' : 'hair',
+          closureAmount: patient.totalDealAmount || 22000,
+          paidAmount: patient.paidAmount || 0,
+          remainingAmount: Math.max(0, (patient.totalDealAmount || 22000) - (patient.paidAmount || 0)),
+          totalSittings: 4,
+          completedSittings: 0,
+        },
+      ];
 
   const [treatments, setTreatments] = useState<TreatmentPlanItem[]>(initialTreatments);
   const [activeFilter, setActiveFilter] = useState<'all' | 'hair' | 'skin'>('all');
@@ -89,7 +94,7 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
           updated.closureAmount = closure;
           updated.paidAmount = paid;
           updated.remainingAmount = Math.max(0, closure - paid);
-          
+
           const totalSits = Number(updated.totalSittings) || 1;
           let compSits = Number(updated.completedSittings) || 0;
           if (compSits > totalSits) compSits = totalSits;
@@ -201,7 +206,7 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 backdrop-blur-md bg-slate-900/50 animate-fade-in overflow-y-auto">
       <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-auto flex flex-col max-h-[92vh] animate-fade-in-up">
-        
+
         {/* Header Ribbon */}
         <div className="px-6 py-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
@@ -236,7 +241,7 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
         {/* Live Patient Financials & Sittings Dashboard */}
         <div className="bg-slate-50 border-b border-slate-200 p-4 shrink-0">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            
+
             {/* Total Closure Amount */}
             <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
               <span className="font-ledger text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
@@ -264,11 +269,10 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
             </div>
 
             {/* Total Left to be Paid */}
-            <div className={`p-3 rounded-xl border shadow-2xs ${
-              overallSummary.totalRemaining > 0
+            <div className={`p-3 rounded-xl border shadow-2xs ${overallSummary.totalRemaining > 0
                 ? 'bg-amber-50 border-amber-300 text-amber-900'
                 : 'bg-emerald-50 border-emerald-300 text-emerald-900'
-            }`}>
+              }`}>
               <span className="font-ledger text-[10px] uppercase font-bold block tracking-wider">
                 Amount Left to Pay
               </span>
@@ -303,17 +307,16 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
 
         {/* Action Controls & Category Tabs */}
         <div className="px-6 py-3 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-          
+
           {/* Category Filter Pills */}
           <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
             <button
               type="button"
               onClick={() => setActiveFilter('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeFilter === 'all'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeFilter === 'all'
                   ? 'bg-white text-slate-900 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               All Treatments ({treatments.length})
             </button>
@@ -321,11 +324,10 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
             <button
               type="button"
               onClick={() => setActiveFilter('hair')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeFilter === 'hair'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${activeFilter === 'hair'
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-indigo-900 hover:bg-white/60'
-              }`}
+                }`}
             >
               <span>💇 Hair Treatments</span>
               <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">
@@ -336,11 +338,10 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
             <button
               type="button"
               onClick={() => setActiveFilter('skin')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeFilter === 'skin'
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${activeFilter === 'skin'
                   ? 'bg-rose-600 text-white shadow-xs'
                   : 'text-rose-900 hover:bg-white/60'
-              }`}
+                }`}
             >
               <span>✨ Skin Treatments</span>
               <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">
@@ -374,7 +375,7 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
 
         {/* Scrollable Treatments Content */}
         <div className="p-6 overflow-y-auto space-y-5 flex-1">
-          
+
           {/* Quick Staff Guidance Note */}
           {showPresetInfo && (
             <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 flex items-start justify-between gap-3 text-xs text-amber-900">
@@ -438,20 +439,18 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
               return (
                 <div
                   key={treatment.id}
-                  className={`p-5 rounded-2xl border transition-all duration-200 shadow-xs space-y-4 ${
-                    isHair
+                  className={`p-5 rounded-2xl border transition-all duration-200 shadow-xs space-y-4 ${isHair
                       ? 'border-indigo-200 bg-gradient-to-br from-white via-indigo-50/20 to-indigo-50/40 hover:border-indigo-300'
                       : 'border-rose-200 bg-gradient-to-br from-white via-rose-50/20 to-rose-50/40 hover:border-rose-300'
-                  }`}
+                    }`}
                 >
                   {/* Treatment Card Top Bar */}
                   <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-slate-100">
                     <div className="flex items-center gap-2.5">
-                      <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
-                        isHair
+                      <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${isHair
                           ? 'bg-indigo-600 text-white'
                           : 'bg-rose-600 text-white'
-                      }`}>
+                        }`}>
                         {index + 1}
                       </span>
 
@@ -460,22 +459,20 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
                         <button
                           type="button"
                           onClick={() => handleUpdate(treatment.id, { category: 'hair' })}
-                          className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                            treatment.category === 'hair'
+                          className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${treatment.category === 'hair'
                               ? 'bg-indigo-100 text-indigo-950 border border-indigo-200'
                               : 'text-slate-500 hover:text-slate-900'
-                          }`}
+                            }`}
                         >
                           💇 Hair
                         </button>
                         <button
                           type="button"
                           onClick={() => handleUpdate(treatment.id, { category: 'skin' })}
-                          className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                            treatment.category === 'skin'
+                          className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${treatment.category === 'skin'
                               ? 'bg-rose-100 text-rose-950 border border-rose-200'
                               : 'text-slate-500 hover:text-slate-900'
-                          }`}
+                            }`}
                         >
                           ✨ Skin
                         </button>
@@ -602,11 +599,10 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
                           Amount Left to Pay (₹)
                         </label>
                         <div
-                          className={`h-9 px-3 rounded-lg border flex items-center justify-between font-ledger font-bold text-xs ${
-                            amountLeft > 0
+                          className={`h-9 px-3 rounded-lg border flex items-center justify-between font-ledger font-bold text-xs ${amountLeft > 0
                               ? 'bg-amber-50 border-amber-300 text-amber-900'
                               : 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                          }`}
+                            }`}
                         >
                           <span>{amountLeft > 0 ? formatIndianCurrency(amountLeft) : '₹0'}</span>
                           <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-white/70">
@@ -627,7 +623,7 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
                     </span>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      
+
                       {/* Sittings Finalized */}
                       <div>
                         <label className="text-[11px] font-bold text-slate-700 block mb-1">
@@ -696,11 +692,10 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
                           No. of Sittings Left
                         </label>
                         <div
-                          className={`h-9 px-3 rounded-lg border flex items-center justify-between font-ledger font-bold text-xs ${
-                            sittingsLeft > 0
+                          className={`h-9 px-3 rounded-lg border flex items-center justify-between font-ledger font-bold text-xs ${sittingsLeft > 0
                               ? 'bg-indigo-50 border-indigo-200 text-indigo-950'
                               : 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                          }`}
+                            }`}
                         >
                           <span>{sittingsLeft} Sittings Left</span>
                           <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-white/70">
@@ -724,13 +719,12 @@ export const ManageTreatmentsModal: React.FC<ManageTreatmentsModalProps> = ({
                       </div>
                       <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
                         <div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            sittingsPercent === 100
+                          className={`h-full rounded-full transition-all duration-300 ${sittingsPercent === 100
                               ? 'bg-emerald-500'
                               : isHair
-                              ? 'bg-indigo-600'
-                              : 'bg-rose-600'
-                          }`}
+                                ? 'bg-indigo-600'
+                                : 'bg-rose-600'
+                            }`}
                           style={{ width: `${sittingsPercent}%` }}
                         ></div>
                       </div>

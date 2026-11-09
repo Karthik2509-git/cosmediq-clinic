@@ -500,14 +500,47 @@ export default function App() {
     showToast(`Sitting logged! Completed ${newCompleted} of ${total} sittings for ${targetTreatmentName}.`);
   };
 
-  // Add appointment
-  const handleAddAppointment = (appointmentData: Omit<Appointment, 'id'>) => {
+  // Add appointment (supports new walk-in / caller / WhatsApp registration)
+  const handleAddAppointment = (
+    appointmentData: Omit<Appointment, 'id'>,
+    newPatientData?: Omit<Patient, 'id' | 'registeredDate'>
+  ) => {
+    let finalPatientId = appointmentData.patientId;
+
+    if (newPatientData) {
+      finalPatientId = `CQ-${2400 + patients.length + 1}`;
+      const newPatient: Patient = {
+        ...newPatientData,
+        id: finalPatientId,
+        registeredDate: new Date().toLocaleDateString('en-CA'),
+      };
+      setPatients((prev) => [newPatient, ...prev]);
+    } else if (appointmentData.patientId) {
+      // Update existing patient with channel, fee, and appointment info
+      setPatients((prev) =>
+        prev.map((p) => {
+          if (p.id === appointmentData.patientId) {
+            return {
+              ...p,
+              bookingChannel: appointmentData.bookingChannel || p.bookingChannel,
+              consultationFee: appointmentData.consultationFee || p.consultationFee,
+              consultationOutcome: appointmentData.consultationOutcome || p.consultationOutcome,
+              nextSitting: `${appointmentData.date}, ${appointmentData.time}`,
+              statusText: `Appointment Scheduled — ${appointmentData.time}`,
+            };
+          }
+          return p;
+        })
+      );
+    }
+
     const newApt: Appointment = {
       ...appointmentData,
+      patientId: finalPatientId,
       id: `APT-${Date.now().toString().slice(-4)}`,
     };
     setAppointments((prev) => [newApt, ...prev]);
-    showToast(`Visit booked for ${newApt.patientName} at ${newApt.time}!`);
+    showToast(`Visit booked for ${newApt.patientName} (${appointmentData.time})! Saved to patient registry.`);
   };
 
   const handleToggleAppointmentStatus = (id: string) => {

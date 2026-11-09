@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -226,13 +238,13 @@ async function startServer() {
   const apiKey = process.env.GEMINI_API_KEY;
   const ai = apiKey
     ? new GoogleGenAI({
-        apiKey,
-        httpOptions: {
-          headers: {
-            'User-Agent': 'aistudio-build',
-          },
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
         },
-      })
+      },
+    })
     : null;
 
   // Health check endpoint
