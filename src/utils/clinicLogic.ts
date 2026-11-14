@@ -54,6 +54,16 @@ export interface Patient {
   outcomeNotes?: string;
 }
 
+export interface SittingRecord {
+  id: string; // e.g. "SIT-1731589123456"
+  sittingNumber: number; // 1, 2, 3...
+  therapistName: string; // e.g. "Priya S.", "Anitha K."
+  date: string; // e.g. "14 Nov 2026, 04:30 PM"
+  notes?: string;
+  treatmentId?: string;
+  treatmentName?: string;
+}
+
 export interface TreatmentPlanItem {
   id: string;
   treatmentName: string;
@@ -65,6 +75,7 @@ export interface TreatmentPlanItem {
   completedSittings: number;
   notes?: string;
   nextSittingDate?: string;
+  sittingHistory?: SittingRecord[];
 }
 
 export interface PaymentRecord {
@@ -355,16 +366,121 @@ export function synchronizePatientFromTreatments(
   };
 }
 
+export const CLINIC_THERAPIST_PRESETS = [
+  'Priya S.',
+  'Anitha K.',
+  'Kavya R.',
+  'Sunita M.',
+  'Rahul T.',
+  'Dr. A. V. Rao',
+  'Dr. Meera Reddy',
+];
+
+export function recordSittingForTreatment(
+  treatment: TreatmentPlanItem,
+  details: {
+    therapistName: string;
+    date?: string;
+    notes?: string;
+  }
+): TreatmentPlanItem {
+  const currentHistory = treatment.sittingHistory || [];
+  const nextSittingNumber = (treatment.completedSittings || 0) + 1;
+  const safeNumber = Math.min(treatment.totalSittings, nextSittingNumber);
+
+  const formattedDate =
+    details.date && details.date.trim() !== ''
+      ? details.date.trim()
+      : `${new Date().toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        })}, ${new Date().toLocaleTimeString('en-IN', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}`;
+
+  const newRecord: SittingRecord = {
+    id: `SIT-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    sittingNumber: safeNumber,
+    therapistName: details.therapistName.trim() || 'Priya S.',
+    date: formattedDate,
+    notes: details.notes?.trim() || undefined,
+    treatmentId: treatment.id,
+    treatmentName: treatment.treatmentName,
+  };
+
+  return {
+    ...treatment,
+    completedSittings: safeNumber,
+    sittingHistory: [...currentHistory, newRecord],
+  };
+}
+
+export function removeSittingFromTreatment(
+  treatment: TreatmentPlanItem,
+  sittingId?: string
+): TreatmentPlanItem {
+  const currentHistory = treatment.sittingHistory || [];
+  let updatedHistory: SittingRecord[] = [];
+
+  if (sittingId) {
+    updatedHistory = currentHistory.filter((s) => s.id !== sittingId);
+  } else {
+    // Remove last sitting
+    updatedHistory = currentHistory.slice(0, -1);
+  }
+
+  // Re-index remaining sitting numbers
+  const reindexed = updatedHistory.map((s, idx) => ({
+    ...s,
+    sittingNumber: idx + 1,
+  }));
+
+  const nextCompleted = Math.max(0, (treatment.completedSittings || 1) - 1);
+
+  return {
+    ...treatment,
+    completedSittings: nextCompleted,
+    sittingHistory: reindexed,
+  };
+}
+
 export function incrementTreatmentSitting(
   deal: ClosureDeal,
-  treatmentId: string
+  treatmentId: string,
+  sittingDetails?: {
+    therapistName: string;
+    date?: string;
+    notes?: string;
+  }
 ): ClosureDeal {
   const updatedTreatments = (deal.treatments || []).map((t) => {
     if (t.id === treatmentId) {
+      if (sittingDetails) {
+        return recordSittingForTreatment(t, sittingDetails);
+      }
       const nextCompleted = Math.min(t.totalSittings, t.completedSittings + 1);
+      const defaultDate = `${new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      })}, ${new Date().toLocaleTimeString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })}`;
+      const fallbackRecord: SittingRecord = {
+        id: `SIT-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        sittingNumber: nextCompleted,
+        therapistName: 'Priya S.',
+        date: defaultDate,
+        treatmentId: t.id,
+        treatmentName: t.treatmentName,
+      };
       return {
         ...t,
         completedSittings: nextCompleted,
+        sittingHistory: [...(t.sittingHistory || []), fallbackRecord],
       };
     }
     return t;
@@ -382,15 +498,26 @@ export function incrementTreatmentSitting(
 export function adjustTreatmentSittingInList(
   treatments: TreatmentPlanItem[],
   treatmentId: string,
-  delta: number
+  delta: number,
+  therapistName?: string
 ): TreatmentPlanItem[] {
   return treatments.map((t) => {
     if (t.id === treatmentId) {
-      const next = Math.max(0, Math.min(t.totalSittings, (t.completedSittings || 0) + delta));
-      return {
-        ...t,
-        completedSittings: next,
-      };
+      const current = t.completedSittings || 0;
+      const target = Math.max(0, Math.min(t.totalSittings, current + delta));
+      let updated = { ...t };
+      if (target > current) {
+        for (let i = current; i < target; i++) {
+          updated = recordSittingForTreatment(updated, {
+            therapistName: therapistName || 'Priya S.',
+          });
+        }
+      } else if (target < current) {
+        for (let i = current; i > target; i--) {
+          updated = removeSittingFromTreatment(updated);
+        }
+      }
+      return updated;
     }
     return t;
   });

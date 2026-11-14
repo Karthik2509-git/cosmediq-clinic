@@ -480,6 +480,14 @@ export const PatientsTab: React.FC<PatientsTabProps> = ({
                                   <span>
                                     Sittings: <strong>{t.completedSittings}/{t.totalSittings}</strong> ({sitsLeft} left)
                                   </span>
+                                  {t.sittingHistory && t.sittingHistory.length > 0 && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="text-indigo-900 font-semibold bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-100">
+                                        Therapist: {t.sittingHistory[t.sittingHistory.length - 1].therapistName}
+                                      </span>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             );
@@ -673,6 +681,14 @@ export const PatientsTab: React.FC<PatientsTabProps> = ({
                                   <span>
                                     Sittings: <strong>{t.completedSittings}/{t.totalSittings}</strong> ({sitsLeft} left)
                                   </span>
+                                  {t.sittingHistory && t.sittingHistory.length > 0 && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="text-indigo-900 font-semibold bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-100">
+                                        Therapist: {t.sittingHistory[t.sittingHistory.length - 1].therapistName}
+                                      </span>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             );

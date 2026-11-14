@@ -15,6 +15,8 @@ import {
   calculateCategoryTreatmentsSummary,
   synchronizePatientFromTreatments,
   adjustTreatmentSittingInList,
+  recordSittingForTreatment,
+  removeSittingFromTreatment,
 } from './clinicLogic.ts';
 import type { ClosureDeal, Patient, InventoryItem, TreatmentPlanItem } from './clinicLogic.ts';
 
@@ -515,5 +517,58 @@ test('adjustTreatmentSittingInList increments and decrements correctly within bo
   const ceil = adjustTreatmentSittingInList(floor, 'T1', 10);
   assert.equal(ceil[0].completedSittings, 4);
 });
+
+test('recordSittingForTreatment logs therapist name, notes, and sitting number accurately', () => {
+  const initialTreatment: TreatmentPlanItem = {
+    id: 'TRT-101',
+    treatmentName: 'HydraFacial MD Deep Infusion',
+    category: 'skin',
+    closureAmount: 16000,
+    paidAmount: 16000,
+    remainingAmount: 0,
+    totalSittings: 4,
+    completedSittings: 0,
+    sittingHistory: [],
+  };
+
+  // Sitting 1 performed by Anitha K.
+  const sit1 = recordSittingForTreatment(initialTreatment, {
+    therapistName: 'Anitha K.',
+    notes: 'Initial deep cleansing & vortex extraction',
+  });
+  assert.equal(sit1.completedSittings, 1);
+  assert.equal(sit1.sittingHistory?.length, 1);
+  assert.equal(sit1.sittingHistory?.[0].therapistName, 'Anitha K.');
+  assert.equal(sit1.sittingHistory?.[0].sittingNumber, 1);
+  assert.equal(sit1.sittingHistory?.[0].notes, 'Initial deep cleansing & vortex extraction');
+
+  // Sitting 2 performed by a different therapist: Priya S.
+  const sit2 = recordSittingForTreatment(sit1, {
+    therapistName: 'Priya S.',
+    notes: 'GlySal acid peel pass 2, skin well hydrated',
+  });
+  assert.equal(sit2.completedSittings, 2);
+  assert.equal(sit2.sittingHistory?.length, 2);
+  assert.equal(sit2.sittingHistory?.[1].therapistName, 'Priya S.');
+  assert.equal(sit2.sittingHistory?.[1].sittingNumber, 2);
+
+  // Sitting 3 performed by Kavya R.
+  const sit3 = recordSittingForTreatment(sit2, {
+    therapistName: 'Kavya R.',
+    notes: 'Antioxidant infusion & red LED light therapy',
+  });
+  assert.equal(sit3.completedSittings, 3);
+  assert.equal(sit3.sittingHistory?.length, 3);
+  assert.equal(sit3.sittingHistory?.[2].therapistName, 'Kavya R.');
+
+  // Test removing a sitting entry
+  const afterRemove = removeSittingFromTreatment(sit3, sit3.sittingHistory?.[1].id);
+  assert.equal(afterRemove.completedSittings, 2);
+  assert.equal(afterRemove.sittingHistory?.length, 2);
+  // Re-indexed
+  assert.equal(afterRemove.sittingHistory?.[0].sittingNumber, 1);
+  assert.equal(afterRemove.sittingHistory?.[1].sittingNumber, 2);
+});
+
 
 

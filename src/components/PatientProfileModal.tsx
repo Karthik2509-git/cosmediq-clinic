@@ -20,7 +20,9 @@ import {
   CheckCircle2,
   Plus,
   Settings2,
-  Sparkles
+  Sparkles,
+  UserCheck,
+  History
 } from 'lucide-react';
 import {
   Patient,
@@ -159,6 +161,50 @@ export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             ></div>
           </div>
         </div>
+
+        {/* Sittings & Therapist History Timeline */}
+        {treatment.sittingHistory && treatment.sittingHistory.length > 0 ? (
+          <div className="bg-white/90 rounded-lg p-2.5 border border-slate-200/90 space-y-1.5">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-700">
+              <span className="flex items-center gap-1.5">
+                <UserCheck className="w-3.5 h-3.5 text-indigo-600" />
+                Therapist Track Record ({treatment.sittingHistory.length} {treatment.sittingHistory.length === 1 ? 'Sitting' : 'Sittings'} Logged)
+              </span>
+            </div>
+            <div className="space-y-1 max-h-36 overflow-y-auto">
+              {treatment.sittingHistory.map((sit, idx) => (
+                <div
+                  key={sit.id || idx}
+                  className="flex items-center justify-between bg-slate-50/80 px-2 py-1.5 rounded-md border border-slate-200/80 text-xs"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-900 font-bold text-[10px] flex items-center justify-center shrink-0">
+                      #{sit.sittingNumber || idx + 1}
+                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[11px] text-slate-500">Therapist:</span>
+                      <span className="font-bold text-indigo-950 px-1.5 py-0.2 rounded bg-indigo-50 border border-indigo-200 text-[11px]">
+                        {sit.therapistName}
+                      </span>
+                      {sit.notes && (
+                        <span className="text-[11px] text-slate-500 italic max-w-xs truncate">
+                          “{sit.notes}”
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-ledger text-slate-400 whitespace-nowrap pl-2">
+                    {sit.date}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : treatment.completedSittings > 0 ? (
+          <div className="bg-amber-50/70 rounded-lg p-2 border border-amber-200/80 text-[11px] text-amber-900 flex items-center justify-between">
+            <span>{treatment.completedSittings} of {treatment.totalSittings} sittings completed.</span>
+          </div>
+        ) : null}
 
         {treatment.notes && (
           <p className="text-[11px] font-ledger text-slate-500 italic">

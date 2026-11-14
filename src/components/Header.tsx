@@ -9,8 +9,7 @@ import {
   UserPlus, 
   PlusCircle, 
   CalendarPlus, 
-  Download, 
-  Sparkles 
+  Download 
 } from 'lucide-react';
 import { formatIndianCurrency } from '../utils/clinicLogic';
 
@@ -27,7 +26,6 @@ interface HeaderProps {
   totalPendingDues: number;
   todayVisitsCount: number;
   lowStockCount: number;
-  onOpenChatbot?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -43,7 +41,6 @@ export const Header: React.FC<HeaderProps> = ({
   totalPendingDues,
   todayVisitsCount,
   lowStockCount,
-  onOpenChatbot,
 }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-header border-b border-slate-200/90 shadow-[0_2px_12px_rgba(30,27,75,0.04)]">
@@ -140,19 +137,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Download className="w-4 h-4" />
             </button>
-
-            {/* Gemini Staff Assistant Trigger Button */}
-            {onOpenChatbot && (
-              <button
-                type="button"
-                onClick={onOpenChatbot}
-                title="Open Gemini Clinic Staff Copilot (AI Portal Guide)"
-                className="h-9 sm:h-10 px-2.5 sm:px-3 rounded-xl bg-teal-50 text-teal-800 hover:bg-teal-100 hover:text-teal-900 border border-teal-200 active:scale-95 flex items-center gap-1.5 font-semibold text-xs transition-all shadow-xs cursor-pointer group shrink-0"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse group-hover:scale-110 transition-transform" />
-                <span className="hidden md:inline">Staff Copilot</span>
-              </button>
-            )}
 
             {/* Staff Desk Profile Badge */}
             <div className="flex items-center gap-2 pl-1.5 sm:pl-2 border-l border-slate-200 shrink-0">

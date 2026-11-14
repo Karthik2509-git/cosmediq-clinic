@@ -23,7 +23,8 @@ import {
   Scissors,
   CheckCircle2,
   AlertCircle,
-  Settings2
+  Settings2,
+  UserCheck
 } from 'lucide-react';
 import { 
   ClosureDeal, 
@@ -727,6 +728,28 @@ export const ClosuresTab: React.FC<ClosuresTabProps> = ({
                                         ></div>
                                       </div>
                                     </div>
+
+                                    {/* Therapist Sitting Track Record */}
+                                    {treatment.sittingHistory && treatment.sittingHistory.length > 0 && (
+                                      <div className="pt-1.5 space-y-1">
+                                        <span className="text-[10px] font-bold text-slate-600 flex items-center gap-1 font-ledger uppercase">
+                                          <UserCheck className="w-3 h-3 text-indigo-600" />
+                                          Therapist Log:
+                                        </span>
+                                        <div className="flex flex-wrap gap-1">
+                                          {treatment.sittingHistory.map((s, sIdx) => (
+                                            <span
+                                              key={s.id || sIdx}
+                                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white border border-slate-200 text-[10px] text-slate-700 shadow-2xs"
+                                              title={s.notes ? `Date: ${s.date}\nNotes: ${s.notes}` : `Date: ${s.date}`}
+                                            >
+                                              <strong className="text-indigo-900">#{s.sittingNumber}</strong>
+                                              <span className="font-semibold text-slate-800">{s.therapistName}</span>
+                                            </span>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
 
                                     {treatment.notes && (
                                       <p className="text-[11px] font-ledger text-slate-500 italic pt-0.5">

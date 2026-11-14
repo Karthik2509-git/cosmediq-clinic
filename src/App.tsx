@@ -15,11 +15,11 @@ import { RecordClosureModal } from './components/RecordClosureModal';
 import { BookVisitModal } from './components/BookVisitModal';
 import { PatientProfileModal } from './components/PatientProfileModal';
 import { DailyRegisterSheetModal } from './components/DailyRegisterSheetModal';
-import { GeminiStaffChatbot } from './components/GeminiStaffChatbot';
+import { LogSittingModal } from './components/LogSittingModal';
 import { ManageTreatmentsModal } from './components/ManageTreatmentsModal';
 import { ConsultationOutcomeModal } from './components/ConsultationOutcomeModal';
 import { Toast } from './components/Toast';
-import { Database, Sparkles, Trash2, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Database, Trash2, RefreshCw, CheckCircle2 } from 'lucide-react';
 
 import {
   Patient,
@@ -35,6 +35,7 @@ import {
   adjustInventoryStock,
   formatIndianCurrency,
   incrementTreatmentSitting,
+  recordSittingForTreatment,
   synchronizePatientFromTreatments,
   calculateTreatmentsSummary,
 } from './utils/clinicLogic';
@@ -75,7 +76,12 @@ export default function App() {
   const [manageTreatmentsPatient, setManageTreatmentsPatient] = useState<Patient | null>(null);
   const [selectedOutcomeAppointment, setSelectedOutcomeAppointment] = useState<Appointment | null>(null);
   const [isRegisterSheetOpen, setIsRegisterSheetOpen] = useState<boolean>(false);
-  const [isChatbotOpen, setIsChatbotOpen] = useState<boolean>(false);
+  const [logSittingTarget, setLogSittingTarget] = useState<{
+    dealIdOrPatientId: string;
+    patientId: string;
+    patientName: string;
+    treatment: TreatmentPlanItem;
+  } | null>(null);
 
   // Notification Toast state
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'alert' | 'info' } | null>(null);
@@ -443,17 +449,69 @@ export default function App() {
     showToast(`Treatment Closure recorded for ${dealData.patientName} (${trtCount} ${trtCount === 1 ? 'treatment' : 'treatments'}, ${formatIndianCurrency(dealData.totalPrice)})!`);
   };
 
-  // Increment completed sitting for a treatment in a deal & patient
+  // Open Log Sitting Modal with therapist entry
   const handleIncrementSitting = (dealIdOrPatientId: string, treatmentId: string) => {
-    let targetTreatmentName = 'treatment';
-    let newCompleted = 1;
-    let total = 1;
+    let foundTreatment: TreatmentPlanItem | null = null;
+    let foundPatientName = '';
+    let foundPatientId = '';
+
+    // Check in deals
+    const deal = deals.find((d) => d.id === dealIdOrPatientId || d.patientId === dealIdOrPatientId);
+    if (deal) {
+      foundPatientName = deal.patientName;
+      foundPatientId = deal.patientId;
+      foundTreatment = deal.treatments?.find((t) => t.id === treatmentId) || null;
+    }
+
+    // If not found in deal, check in patients
+    if (!foundTreatment) {
+      const p = patients.find((pt) => pt.id === dealIdOrPatientId || (pt.treatments && pt.treatments.some((t) => t.id === treatmentId)));
+      if (p) {
+        foundPatientName = p.name;
+        foundPatientId = p.id;
+        foundTreatment = p.treatments?.find((t) => t.id === treatmentId) || null;
+      }
+    }
+
+    // Also check profilePatient if open
+    if (!foundTreatment && profilePatient) {
+      foundPatientName = profilePatient.name;
+      foundPatientId = profilePatient.id;
+      foundTreatment = profilePatient.treatments?.find((t) => t.id === treatmentId) || null;
+    }
+
+    if (!foundTreatment) {
+      showToast('Treatment item not found to log sitting.', 'alert');
+      return;
+    }
+
+    if (foundTreatment.completedSittings >= foundTreatment.totalSittings) {
+      showToast(`All ${foundTreatment.totalSittings} sittings already completed for this treatment!`, 'info');
+      return;
+    }
+
+    setLogSittingTarget({
+      dealIdOrPatientId,
+      patientId: foundPatientId,
+      patientName: foundPatientName,
+      treatment: foundTreatment,
+    });
+  };
+
+  // Confirm and persist sitting with therapist tracking
+  const handleConfirmLogSitting = (details: { therapistName: string; date: string; notes?: string }) => {
+    if (!logSittingTarget) return;
+    const { dealIdOrPatientId, treatment } = logSittingTarget;
+    const treatmentId = treatment.id;
+    let targetTreatmentName = treatment.treatmentName;
+    let newCompleted = (treatment.completedSittings || 0) + 1;
+    let total = treatment.totalSittings;
 
     // Update in deals
     setDeals((prev) =>
       prev.map((deal) => {
         if (deal.id === dealIdOrPatientId || deal.patientId === dealIdOrPatientId) {
-          const updated = incrementTreatmentSitting(deal, treatmentId);
+          const updated = incrementTreatmentSitting(deal, treatmentId, details);
           const t = updated.treatments?.find((item) => item.id === treatmentId);
           if (t) {
             targetTreatmentName = t.treatmentName;
@@ -472,11 +530,11 @@ export default function App() {
         if (p.id === dealIdOrPatientId || (p.treatments && p.treatments.some((t) => t.id === treatmentId))) {
           const updatedTreatments = (p.treatments || []).map((t) => {
             if (t.id === treatmentId) {
-              const next = Math.min(t.totalSittings, t.completedSittings + 1);
-              targetTreatmentName = t.treatmentName;
-              newCompleted = next;
-              total = t.totalSittings;
-              return { ...t, completedSittings: next };
+              const updatedTrt = recordSittingForTreatment(t, details);
+              targetTreatmentName = updatedTrt.treatmentName;
+              newCompleted = updatedTrt.completedSittings;
+              total = updatedTrt.totalSittings;
+              return updatedTrt;
             }
             return t;
           });
@@ -484,7 +542,7 @@ export default function App() {
           return {
             ...p,
             treatments: updatedTreatments,
-            statusText: allDone ? 'All Sittings Completed' : `Sitting ${newCompleted}/${total} Completed`,
+            statusText: allDone ? 'All Sittings Completed' : `Sitting ${newCompleted}/${total} Completed (${details.therapistName})`,
           };
         }
         return p;
@@ -497,7 +555,7 @@ export default function App() {
       if (prev.id === dealIdOrPatientId || (prev.treatments && prev.treatments.some((t) => t.id === treatmentId))) {
         const updatedTreatments = (prev.treatments || []).map((t) => {
           if (t.id === treatmentId) {
-            return { ...t, completedSittings: Math.min(t.totalSittings, t.completedSittings + 1) };
+            return recordSittingForTreatment(t, details);
           }
           return t;
         });
@@ -506,7 +564,8 @@ export default function App() {
       return prev;
     });
 
-    showToast(`Sitting logged! Completed ${newCompleted} of ${total} sittings for ${targetTreatmentName}.`);
+    setLogSittingTarget(null);
+    showToast(`Sitting #${newCompleted} recorded! Conducted by Therapist ${details.therapistName}.`);
   };
 
   // Add appointment (supports new walk-in / caller / WhatsApp registration)
@@ -756,7 +815,6 @@ export default function App() {
         totalPendingDues={financialStats.totalPending}
         todayVisitsCount={todayVisits.length}
         lowStockCount={lowStockCount}
-        onOpenChatbot={() => setIsChatbotOpen(true)}
       />
 
       {/* Main Workspace Screen Container */}
@@ -1013,16 +1071,16 @@ export default function App() {
       {/* Live Feedback Toast */}
       {toast && <Toast message={toast.message} type={toast.type} />}
 
-      {/* Gemini AI Staff Desk Copilot Chatbot */}
-      <GeminiStaffChatbot
-        activeTab={activeTab}
-        patientCount={patients.length}
-        pendingDueTotal={formatIndianCurrency(financialStats.totalPending)}
-        lowStockCount={lowStockCount}
-        onNavigateTab={(tab) => setActiveTab(tab)}
-        isOpenExternal={isChatbotOpen}
-        onToggleExternal={(open) => setIsChatbotOpen(open)}
-      />
+      {/* Log Completed Sitting Modal with Therapist Tracking */}
+      {logSittingTarget && (
+        <LogSittingModal
+          patientName={logSittingTarget.patientName}
+          patientId={logSittingTarget.patientId}
+          treatment={logSittingTarget.treatment}
+          onClose={() => setLogSittingTarget(null)}
+          onConfirmSitting={handleConfirmLogSitting}
+        />
+      )}
 
     </div>
   );
